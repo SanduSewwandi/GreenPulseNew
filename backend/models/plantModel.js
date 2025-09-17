@@ -18,7 +18,38 @@ const addPlant = (name, treeType, datePlanted, imageUrl, latitude, longitude) =>
     });
   });
 };
+// Function to get all plants from the database
+const getPlants = () => {
+  return new Promise((resolve, reject) => {
+    const query = 'SELECT * FROM plants'; // SQL query to fetch all plants
+
+    db.query(query, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result); // Return the result (list of plants)
+      }
+    });
+  });
+};
+
+// Function to get a specific plant by ID from the database
+const getPlantById = (id) => {
+  return new Promise((resolve, reject) => {
+    const query = 'SELECT * FROM plants WHERE id = ?'; // SQL query to fetch a plant by ID
+
+    db.query(query, [id], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result[0]); // Return the plant (first result)
+      }
+    });
+  });
+};
 
 module.exports = {
-  addPlant
+  addPlant,
+  getPlants,
+  getPlantById
 };

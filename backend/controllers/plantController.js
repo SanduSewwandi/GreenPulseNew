@@ -24,3 +24,36 @@ exports.registerPlant = async (req, res) => {
     res.status(500).json({ message: 'Error registering plant', error: error.message });
   }
 };
+// Controller for getting all plants
+exports.getAllPlants = async (req, res) => {
+  try {
+    const plants = await plantModel.getPlants(); // Call the model function to get plants from DB
+
+    if (plants.length === 0) {
+      return res.status(404).json({ message: 'No plants found.' });
+    }
+
+    res.status(200).json(plants); // Return the list of plants
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching plants', error: error.message });
+  }
+};
+
+// Controller for getting a specific plant by ID
+exports.getPlantById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const plant = await plantModel.getPlantById(id); // Call the model function to get a plant by ID
+
+    if (!plant) {
+      return res.status(404).json({ message: 'Plant not found.' });
+    }
+
+    res.status(200).json(plant); // Return the plant details
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching plant', error: error.message });
+  }
+};
